@@ -1,0 +1,24 @@
+version: 2
+
+sources:                          # ✅ source definition added
+  - name: btc                     # 1st arg in source('btc','btc')
+    database: BTC                 # ✅ matches your Snowflake DB
+    schema: BTC_SCHEMA            # ✅ matches your schema
+    tables:
+      - name: BTC                 # 2nd arg in source('btc','btc')
+        loaded_at_field: BLOCK_TIMESTAMP
+        freshness:
+          warn_after:
+            count: 12
+            period: hour
+          error_after:
+            count: 24
+            period: hour
+
+models:
+  - name: stg_btc
+    columns:
+      - name: HASH_KEY
+        tests:
+          - unique
+          - not_null
